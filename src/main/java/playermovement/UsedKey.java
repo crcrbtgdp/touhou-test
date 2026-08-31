@@ -1,3 +1,5 @@
+package playermovement;
+
 public enum UsedKey {
     VK_Z,
     VK_X,

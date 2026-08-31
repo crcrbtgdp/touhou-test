@@ -1,11 +1,13 @@
+package playermovement;
+
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.awt.event.KeyEvent;
-import input.PlayerKeyListener;
+import playermovement.input.PlayerKeyListener;
 
 public class InputManager {
 
-    static PlayerKeyListener keys;
+    public static PlayerKeyListener keys;
     private static HashMap<Integer, Boolean> pressingKeys2;
     static EnumMap<UsedKey, Boolean> pressingKeys;
 
@@ -14,7 +16,7 @@ public class InputManager {
         pressingKeys = new EnumMap<>(UsedKey.class);
     }
 
-    static void update() {
+    public static void update() {
         pressingKeys2 = new HashMap<>(keys.pressingKey);
         keys.reset();
         for (int a : pressingKeys2.keySet()) {

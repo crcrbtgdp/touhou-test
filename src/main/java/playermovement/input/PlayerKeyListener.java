@@ -1,4 +1,4 @@
-package input;
+package playermovement.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -27,7 +27,9 @@ public class PlayerKeyListener implements KeyListener {
 
     public void reset() {
         for (int a : pressingKey.keySet()) {
-            pressingKey.replace(a, false);
+            if (typeKeys.contains(a)) {
+                pressingKey.replace(a, false);
+            }
         }
     }
 
