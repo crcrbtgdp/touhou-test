@@ -1,4 +1,4 @@
-package danmaku;
+package io.github.crcrbtgdp.touhou_test.danmaku;
 
 public class BarrageManager {
 

@@ -1,3 +1,5 @@
+package io.github.crcrbtgdp.touhou_test;
+
 import javax.swing.JPanel;
 import java.awt.*;
 

@@ -1,10 +1,7 @@
+package io.github.crcrbtgdp.touhou_test;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import danmaku.BarrageManager;
-import playermovement.InputManager;
-import playermovement.PlayerMoving;
 
 public class GameScreen {
     public static double[][] coordinates;

@@ -1,9 +1,8 @@
-import danmaku.BarrageManager;
-import playermovement.InputManager;
-import playermovement.PlayerMoving;
+package io.github.crcrbtgdp.touhou_test;
+
+import io.github.crcrbtgdp.touhou_test.danmaku.BarrageManager;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

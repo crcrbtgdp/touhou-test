@@ -1,9 +1,8 @@
-package playermovement;
+package io.github.crcrbtgdp.touhou_test;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.awt.event.KeyEvent;
-import playermovement.input.PlayerKeyListener;
 
 public class InputManager {
 

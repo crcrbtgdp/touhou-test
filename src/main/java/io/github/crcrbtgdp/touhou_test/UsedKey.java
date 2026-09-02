@@ -1,4 +1,4 @@
-package playermovement;
+package io.github.crcrbtgdp.touhou_test;
 
 public enum UsedKey {
     VK_Z,

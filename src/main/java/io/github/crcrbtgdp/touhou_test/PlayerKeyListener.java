@@ -1,4 +1,4 @@
-package playermovement.input;
+package io.github.crcrbtgdp.touhou_test;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
