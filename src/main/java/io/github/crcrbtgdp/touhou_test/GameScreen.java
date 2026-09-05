@@ -1,5 +1,9 @@
 package io.github.crcrbtgdp.touhou_test;
 
+import io.github.crcrbtgdp.touhou_test.playermovement.InputManager;
+import io.github.crcrbtgdp.touhou_test.playermovement.PlayerMoving;
+import io.github.crcrbtgdp.touhou_test.screens.BarrageScreen;
+
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
@@ -18,7 +22,7 @@ public class GameScreen {
         InputManager.update();
 
         JFrame window = new JFrame("東方");
-        Screen screen = new Screen();
+        BarrageScreen screen = new BarrageScreen();
 
         ActionListener game = new GameLoop(window, screen);
         new Timer(17, game).start();

@@ -1,4 +1,4 @@
-package io.github.crcrbtgdp.touhou_test.danmaku;
+package io.github.crcrbtgdp.touhou_test.barrage;
 
 public class BarrageMoving {
 

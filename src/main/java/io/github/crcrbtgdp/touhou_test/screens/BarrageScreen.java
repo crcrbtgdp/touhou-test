@@ -1,11 +1,13 @@
-package io.github.crcrbtgdp.touhou_test;
+package io.github.crcrbtgdp.touhou_test.screens;
+
+import io.github.crcrbtgdp.touhou_test.GameScreen;
 
 import javax.swing.JPanel;
 import java.awt.*;
 
-public class Screen extends JPanel {
+public class BarrageScreen extends JPanel {
 
-    Screen() {
+    public BarrageScreen() {
         super();
         this.setFocusable(true);
         this.requestFocusInWindow();

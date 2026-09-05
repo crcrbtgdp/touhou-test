@@ -1,6 +1,9 @@
 package io.github.crcrbtgdp.touhou_test;
 
-import io.github.crcrbtgdp.touhou_test.danmaku.BarrageManager;
+import io.github.crcrbtgdp.touhou_test.barrage.BarrageManager;
+import io.github.crcrbtgdp.touhou_test.playermovement.InputManager;
+import io.github.crcrbtgdp.touhou_test.playermovement.PlayerMoving;
+import io.github.crcrbtgdp.touhou_test.screens.BarrageScreen;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -9,16 +12,16 @@ import java.awt.event.ActionListener;
 public class GameLoop implements ActionListener {
 
     JFrame window;
-    Screen screen;
+    BarrageScreen barrageScreen;
 
     int player = 3;
 
     int totalFrames = 0;
     BarrageManager barrage;
 
-    GameLoop(JFrame j, Screen sc) {
+    GameLoop(JFrame j, BarrageScreen sc) {
         window = j;
-        screen = sc;
+        barrageScreen = sc;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class GameLoop implements ActionListener {
             //window.setLayout(new GridBagLayout());
             //GridBagConstraints gbc = new GridBagConstraints();
             window.setSize(GameScreen.windowSize, GameScreen.windowSize);
-            window.add(screen);
+            window.add(barrageScreen);
             window.setVisible(true);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.setFocusable(true);
@@ -57,7 +60,7 @@ public class GameLoop implements ActionListener {
             System.exit(0);
         }
 
-        screen.repaint();
+        barrageScreen.repaint();
 
         if (totalFrames%60 == 0) {
             System.out.println(GameScreen.playerX);

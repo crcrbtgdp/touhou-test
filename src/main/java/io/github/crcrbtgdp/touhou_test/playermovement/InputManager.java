@@ -1,4 +1,6 @@
-package io.github.crcrbtgdp.touhou_test;
+package io.github.crcrbtgdp.touhou_test.playermovement;
+
+import io.github.crcrbtgdp.touhou_test.playermovement.input.PlayerKeyListener;
 
 import java.util.EnumMap;
 import java.util.HashMap;
