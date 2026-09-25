@@ -2,15 +2,10 @@ package io.github.crcrbtgdp.touhou_test.screens;
 
 import io.github.crcrbtgdp.touhou_test.GameLoop;
 import io.github.crcrbtgdp.touhou_test.GameScreen;
-import io.github.crcrbtgdp.touhou_test.barrage.BarrageManager;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 public class BarrageScreen extends JPanel {
@@ -26,12 +21,7 @@ public class BarrageScreen extends JPanel {
         this.requestFocusInWindow();
         fran = new ImageIcon(imageUrl[0]);
         reimu = new ImageIcon((imageUrl[1]));
-        imageObserver = new ImageObserver() {
-            @Override
-            public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-                return false;
-            }
-        };
+        imageObserver = (img, infoflags, x, y, width, height) -> false;
     }
 
     @Override
@@ -49,6 +39,5 @@ public class BarrageScreen extends JPanel {
         g.drawImage(reimu.getImage(), (int)GameScreen.playerX, (int)GameScreen.playerY, (int) (50*GameScreen.windowRatio), (int) (50*GameScreen.windowRatio), imageObserver);
         g.setColor(Color.RED);
         g.drawImage(fran.getImage(), (int) GameLoop.barrage.bm.getBossCoordinateX()-25, (int) GameLoop.barrage.bm.getBossCoordinateY()-25, 50, 50, imageObserver);
-        //g.fillRect((int) GameLoop.barrage.bm.getBossCoordinateX(), (int) GameLoop.barrage.bm.getBossCoordinateY(),30, 30);
     }
 }
