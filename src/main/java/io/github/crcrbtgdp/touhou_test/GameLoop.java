@@ -17,7 +17,7 @@ public class GameLoop implements ActionListener {
     int player = 3;
 
     int totalFrames = 0;
-    BarrageManager barrage;
+    public static BarrageManager barrage;
 
     GameLoop(JFrame j, BarrageScreen sc) {
         window = j;
