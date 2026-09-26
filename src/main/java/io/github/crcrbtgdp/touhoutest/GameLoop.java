@@ -1,6 +1,7 @@
 package io.github.crcrbtgdp.touhoutest;
 
 import io.github.crcrbtgdp.touhoutest.barrage.BarrageManager;
+import io.github.crcrbtgdp.touhoutest.barrage.BossMoving;
 import io.github.crcrbtgdp.touhoutest.playermovement.InputManager;
 import io.github.crcrbtgdp.touhoutest.playermovement.PlayerMoving;
 import io.github.crcrbtgdp.touhoutest.screens.BarrageScreen;
@@ -56,12 +57,12 @@ public class GameLoop implements ActionListener {
 
         if (totalFrames%180 >= 60) {
             if (totalFrames%180 == 60) {
-                lastBossX = barrage.getLast().bm.getBossCoordinateX();
+                lastBossX = BossMoving.getBossCoordinateX();
                 bossX = Math.random()*(double)GameScreen.windowSize;
                 lastBossFrame = totalFrames;
                 System.out.println(true);
             }
-            barrage.getLast().bm.setBossCoordinateX((bossX-lastBossX)*(totalFrames-lastBossFrame)/120+lastBossX);
+            BossMoving.setBossCoordinateX((bossX-lastBossX)*(totalFrames-lastBossFrame)/120+lastBossX);
         }
 
             int len = barrage.size();

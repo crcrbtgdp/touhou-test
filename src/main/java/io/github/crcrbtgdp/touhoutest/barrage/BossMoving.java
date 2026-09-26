@@ -3,22 +3,22 @@ package io.github.crcrbtgdp.touhoutest.barrage;
 import io.github.crcrbtgdp.touhoutest.GameScreen;
 
 public class BossMoving {
-    private double bossCoordinateX = (double) GameScreen.windowSize /2;
-    private double bossCoordinateY = (double) GameScreen.windowSize /10;
+    private static double bossCoordinateX = (double) GameScreen.windowSize /2;
+    private static double bossCoordinateY = (double) GameScreen.windowSize /10;
 
-    public double getBossCoordinateY() {
+    public static double getBossCoordinateY() {
         return bossCoordinateY;
     }
 
-    public void setBossCoordinateY(double bossCoordinateY) {
-        this.bossCoordinateY = bossCoordinateY;
+    public static void setBossCoordinateY(double bossCoordinateY) {
+        BossMoving.bossCoordinateY = bossCoordinateY;
     }
 
-    public double getBossCoordinateX() {
+    public static double getBossCoordinateX() {
         return bossCoordinateX;
     }
 
-    public void setBossCoordinateX(double bossCoordinateX) {
-        this.bossCoordinateX = bossCoordinateX;
+    public static void setBossCoordinateX(double bossCoordinateX) {
+        BossMoving.bossCoordinateX = bossCoordinateX;
     }
 }
