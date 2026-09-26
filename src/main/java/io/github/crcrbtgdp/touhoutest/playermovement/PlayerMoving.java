@@ -1,4 +1,4 @@
-package io.github.crcrbtgdp.touhou_test.playermovement;
+package io.github.crcrbtgdp.touhoutest.playermovement;
 
 public class PlayerMoving {
 

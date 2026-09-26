@@ -1,7 +1,7 @@
-package io.github.crcrbtgdp.touhou_test.screens;
+package io.github.crcrbtgdp.touhoutest.screens;
 
-import io.github.crcrbtgdp.touhou_test.GameLoop;
-import io.github.crcrbtgdp.touhou_test.GameScreen;
+import io.github.crcrbtgdp.touhoutest.GameLoop;
+import io.github.crcrbtgdp.touhoutest.GameScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,6 +38,6 @@ public class BarrageScreen extends JPanel {
         g.setColor(Color.WHITE);
         g.drawImage(reimu.getImage(), (int)GameScreen.playerX, (int)GameScreen.playerY, (int) (50*GameScreen.windowRatio), (int) (50*GameScreen.windowRatio), imageObserver);
         g.setColor(Color.RED);
-        g.drawImage(fran.getImage(), (int) GameLoop.barrage.bm.getBossCoordinateX()-25, (int) GameLoop.barrage.bm.getBossCoordinateY()-25, 50, 50, imageObserver);
+        g.drawImage(fran.getImage(), (int) GameLoop.barrage.getFirst().bm.getBossCoordinateX()-25, (int) GameLoop.barrage.getFirst().bm.getBossCoordinateY()-25, 50, 50, imageObserver);
     }
 }

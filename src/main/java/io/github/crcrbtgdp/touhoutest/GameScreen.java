@@ -1,8 +1,8 @@
-package io.github.crcrbtgdp.touhou_test;
+package io.github.crcrbtgdp.touhoutest;
 
-import io.github.crcrbtgdp.touhou_test.playermovement.InputManager;
-import io.github.crcrbtgdp.touhou_test.playermovement.PlayerMoving;
-import io.github.crcrbtgdp.touhou_test.screens.BarrageScreen;
+import io.github.crcrbtgdp.touhoutest.playermovement.InputManager;
+import io.github.crcrbtgdp.touhoutest.playermovement.PlayerMoving;
+import io.github.crcrbtgdp.touhoutest.screens.BarrageScreen;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

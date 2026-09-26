@@ -1,8 +1,10 @@
-package io.github.crcrbtgdp.touhou_test.barrage;
+package io.github.crcrbtgdp.touhoutest.barrage;
+
+import io.github.crcrbtgdp.touhoutest.GameScreen;
 
 public class BossMoving {
-    private double bossCoordinateX = 500;
-    private double bossCoordinateY = 100;
+    private double bossCoordinateX = (double) GameScreen.windowSize /2;
+    private double bossCoordinateY = (double) GameScreen.windowSize /10;
 
     public double getBossCoordinateY() {
         return bossCoordinateY;

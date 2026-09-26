@@ -1,4 +1,4 @@
-package io.github.crcrbtgdp.touhou_test;
+package io.github.crcrbtgdp.touhoutest;
 
 public class HitDetection {
     static boolean judgement(double x1, double y1, double x2, double y2) {
