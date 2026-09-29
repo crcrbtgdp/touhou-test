@@ -2,6 +2,7 @@ package io.github.crcrbtgdp.touhoutest;
 
 import io.github.crcrbtgdp.touhoutest.barrage.BarrageManager;
 import io.github.crcrbtgdp.touhoutest.barrage.BossMoving;
+import io.github.crcrbtgdp.touhoutest.loop.CoordinateConcatenation;
 import io.github.crcrbtgdp.touhoutest.playermovement.InputManager;
 import io.github.crcrbtgdp.touhoutest.playermovement.PlayerMoving;
 import io.github.crcrbtgdp.touhoutest.screens.BarrageScreen;
@@ -16,13 +17,18 @@ public class GameLoop implements ActionListener {
     JFrame window;
     BarrageScreen barrageScreen;
 
-    int player = 3;
+    boolean hit;
+    public static int pichu = -1;
+
+    public static int player = 3;
 
     double bossX = (double) GameScreen.windowSize /2;
     double lastBossX = (double) GameScreen.windowSize /2;
     int lastBossFrame;
 
-    int totalFrames = 0;
+    double[] lastPlayerCoordinate;
+
+    public static int totalFrames = 0;
     public static ArrayList<BarrageManager> barrage = new ArrayList<>();
 
     GameLoop(JFrame j, BarrageScreen sc) {
@@ -36,7 +42,7 @@ public class GameLoop implements ActionListener {
         if (totalFrames == 0) {
             //window.setLayout(new GridBagLayout());
             //GridBagConstraints gbc = new GridBagConstraints();
-            window.setSize(GameScreen.windowSize, GameScreen.windowSize);
+            window.setSize((int)(GameScreen.windowSize*1.33), GameScreen.windowSize);
             window.add(barrageScreen);
             window.setVisible(true);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,8 +50,6 @@ public class GameLoop implements ActionListener {
             window.requestFocusInWindow();
             window.addKeyListener(InputManager.keys);
         }
-
-
 
         if (totalFrames%180 == 0) {
             barrage.add(new BarrageManager((double)totalFrames/60));
@@ -62,43 +66,38 @@ public class GameLoop implements ActionListener {
                 lastBossFrame = totalFrames;
                 System.out.println(true);
             }
-            BossMoving.setBossCoordinateX((bossX-lastBossX)*(totalFrames-lastBossFrame)/120+lastBossX);
+//            BossMoving.setBossCoordinateX((bossX-lastBossX)*(totalFrames-lastBossFrame)/120+lastBossX);
+            BossMoving.setBossCoordinateX((bossX-lastBossX)*(Math.atan((totalFrames-lastBossFrame)/24d-2.5)/2d/Math.atan(2.5)+0.5)+lastBossX);
         }
 
-            int len = barrage.size();
-        double[][][] barrages = new double[len][][];
-        int n = 0;
-        for (BarrageManager barrage2: barrage) {
-            barrages[n] = barrage2.update((double)totalFrames/60);
-            n++;
-        }
-        int len2 = 0;
-        int[] len3 = new int[len];
-        int[] len4 = new int[len];
-        for (int i = 0; i < len; i++) {
-            len2 += barrages[i][0].length;
-            len3[i] = barrages[i][0].length;
-            len4[i] = len2;
-        }
-        double[] coordinatesX = new double[len2];
-        double[] coordinatesY = new double[len2];
-        for (int i = 0; i < len; i++) {
-            System.arraycopy(barrages[i][0], 0, coordinatesX, i==0?0:len4[i-1], len3[i]);
-            System.arraycopy(barrages[i][1], 0, coordinatesY, i==0?0:len4[i-1], len3[i]);
-        }
-        GameScreen.coordinates = new double[][]{coordinatesX, coordinatesY};
+        GameScreen.coordinates = CoordinateConcatenation.concatenation(barrage, totalFrames);
 
         //GameScreen.coordinates = barrage.update((double)(totalFrames%720)/60);
-        double[] playerCoordinate = PlayerMoving.move(GameScreen.playerX, GameScreen.playerY);
-        GameScreen.playerX = playerCoordinate[0];
-        GameScreen.playerY = playerCoordinate[1];
-        InputManager.update();
 
-        for (int i = 0; i < GameScreen.coordinates[0].length; i++) {
-            boolean hit = HitDetection.judgement(playerCoordinate[0], playerCoordinate[1], GameScreen.coordinates[0][i], GameScreen.coordinates[1][i]);
-            if (hit) {
-                player--;
-                break;
+        double[] playerCoordinate = PlayerMoving.move(GameScreen.playerX, GameScreen.playerY);
+        if (totalFrames != 0) {
+            if (playerCoordinate[0] < GameScreen.windowSize-(25*GameScreen.windowRatio) && playerCoordinate[0] >= -25*GameScreen.windowRatio) {
+                GameScreen.playerX = playerCoordinate[0];
+            }
+            if (playerCoordinate[1] < GameScreen.windowSize-(25*GameScreen.windowRatio) && playerCoordinate[1] >= -25*GameScreen.windowRatio) {
+                GameScreen.playerY = playerCoordinate[1];
+            }
+        }
+        InputManager.update();
+        lastPlayerCoordinate = playerCoordinate;
+
+        if (pichu == -1) {
+            for (int i = 0; i < GameScreen.coordinates[0].length; i++) {
+                boolean hit = HitDetection.judgement(playerCoordinate[0], playerCoordinate[1], GameScreen.coordinates[0][i], GameScreen.coordinates[1][i]);
+                if (!this.hit && hit) {
+                    player--;
+                    this.hit = true;
+                    pichu = totalFrames;
+                    break;
+                }
+                if (i + 1 == GameScreen.coordinates[0].length) {
+                    this.hit = hit;
+                }
             }
         }
         if (player < 0) {
@@ -110,7 +109,6 @@ public class GameLoop implements ActionListener {
         if (totalFrames%60 == 0) {
             System.out.println(GameScreen.playerX);
         }
-
         totalFrames++;
     }
 }
