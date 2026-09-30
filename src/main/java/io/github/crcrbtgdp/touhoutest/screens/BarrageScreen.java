@@ -82,12 +82,16 @@ public class BarrageScreen extends JPanel {
         int[] xPoints2 = new int[10];
         int[] yPoints2 = new int[10];
 
-        for (int i = 0; i < GameLoop.player; i++) {
+        for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 10; j++) {
                 xPoints2[j] = xPoints[j] + (int) (GameScreen.windowSize * 1.14 + ((double) (i * GameScreen.windowSize) /36));
                 yPoints2[j] = yPoints[j] + (int) (GameScreen.windowSize*0.19);
             }
-            g.fillPolygon(xPoints2, yPoints2, 10);
+            if (i < GameLoop.player) {
+                g.fillPolygon(xPoints2, yPoints2, 10);
+            } else {
+                g.drawPolygon(xPoints2, yPoints2, 10);
+            }
         }
 
         g.setColor(Color.ORANGE);

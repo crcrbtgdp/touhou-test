@@ -64,7 +64,7 @@ public class GameLoop implements ActionListener {
             window.requestFocusInWindow();
             window.addKeyListener(InputManager.keys);
             try {
-                File file = new File(getClass().getResource("/owen.wav").toURI());
+                File file = new File(getClass().getResource("/bgm.wav").toURI());
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioIn);
@@ -77,16 +77,16 @@ public class GameLoop implements ActionListener {
             bullets = new BulletsMoving();
         }
 
-        if (totalFrames%180 == 0) {
-            barrage.add(new BarrageManager((double)totalFrames/60));
+        if (totalFrames%((int)GameScreen.fps) == 0) {
+            barrage.add(new BarrageManager((double)totalFrames/GameScreen.fps));
             barrage.getLast().generate();
-            if (totalFrames >= 1440) {
+            if (totalFrames >= GameScreen.fps*24) {
                 barrage.removeFirst();
             }
         }
 
-        if (totalFrames%180 >= 60) {
-            if (totalFrames%180 == 60) {
+        if (totalFrames != 0 && totalFrames%((int)GameScreen.fps*3) >= GameScreen.fps) {
+            if (totalFrames%((int)GameScreen.fps*3) == GameScreen.fps) {
                 lastBossX = BossMoving.getBossCoordinateX();
                 bossX = Math.random()*(double)GameScreen.windowSize;
                 lastBossFrame = totalFrames;
@@ -146,7 +146,7 @@ public class GameLoop implements ActionListener {
 
         barrageScreen.repaint();
 
-        if (totalFrames%60 == 0) {
+        if (totalFrames%(int)GameScreen.fps == 0) {
             System.out.println(GameScreen.playerX);
         }
         if (bullets.bossHP <= 0) {
