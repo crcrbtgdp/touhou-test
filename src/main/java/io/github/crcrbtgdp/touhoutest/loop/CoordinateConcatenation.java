@@ -1,5 +1,6 @@
 package io.github.crcrbtgdp.touhoutest.loop;
 
+import io.github.crcrbtgdp.touhoutest.GameScreen;
 import io.github.crcrbtgdp.touhoutest.barrage.BarrageManager;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class CoordinateConcatenation {
         double[][][] barrages = new double[len][][];
         int n = 0;
         for (BarrageManager barrage2: barrage) {
-            barrages[n] = barrage2.update((double)totalFrames/60);
+            barrages[n] = barrage2.update((double)totalFrames/ GameScreen.fps);
             n++;
         }
         int len2 = 0;

@@ -3,6 +3,7 @@ package io.github.crcrbtgdp.touhoutest.screens;
 import io.github.crcrbtgdp.touhoutest.GameLoop;
 import io.github.crcrbtgdp.touhoutest.GameScreen;
 import io.github.crcrbtgdp.touhoutest.barrage.BossMoving;
+import io.github.crcrbtgdp.touhoutest.playerbullets.BulletsMoving;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ public class BarrageScreen extends JPanel {
     ImageIcon fran;
     ImageIcon reimu;
     Font font;
-    URL[] imageUrl = {getClass().getResource("/フラン.png"), getClass().getResource("/霊夢.png")};
+    URL[] imageUrl = {getClass().getResource("/fran.png"), getClass().getResource("/reimu.png")};
     ImageObserver imageObserver;
     double[] starX = {0, 0.58779, -0.58779, 0.95106, -0.95106};
     double[] starY = {1, -0.80902, -0.80902, 0.30902, 0.30902};
@@ -61,10 +62,17 @@ public class BarrageScreen extends JPanel {
             g.fillOval((int)GameScreen.coordinates[0][i]-(int)(10*GameScreen.windowRatio), (int)GameScreen.coordinates[1][i]-(int)(10*GameScreen.windowRatio), (int)(20*GameScreen.windowRatio),(int)(20*GameScreen.windowRatio));
         }
 
+        g.setColor(Color.BLUE);
+        if (GameLoop.playerBullets[0] != null) {
+            for (int i = 0; i < GameLoop.playerBullets[0].length; i++) {
+                g.fillOval((int) GameLoop.playerBullets[0][i], (int) GameLoop.playerBullets[1][i], (int) (10 * GameScreen.windowRatio), (int) (10 * GameScreen.windowRatio));
+            }
+        }
+
         g.setColor(Color.DARK_GRAY);
         g.drawImage(reimu.getImage(), (int)GameScreen.playerX-(int)(25*GameScreen.windowRatio), (int)GameScreen.playerY-(int)(25*GameScreen.windowRatio), (int) (50*GameScreen.windowRatio), (int) (50*GameScreen.windowRatio), imageObserver);
 
-        g.drawImage(fran.getImage(), (int) ((int) BossMoving.getBossCoordinateX()-(25*GameScreen.windowRatio)), (int) BossMoving.getBossCoordinateY()-(int) (25*GameScreen.windowRatio), (int) (50*GameScreen.windowRatio), (int) (50*GameScreen.windowRatio), imageObserver);
+        g.drawImage(fran.getImage(), (int) ((int) BossMoving.getBossCoordinateX()-(40*GameScreen.windowRatio)), (int) BossMoving.getBossCoordinateY()-(int) (40*GameScreen.windowRatio), (int) (80*GameScreen.windowRatio), (int) (80*GameScreen.windowRatio), imageObserver);
         g.fillRect(GameScreen.windowSize, 0, (int)(GameScreen.windowSize*0.33), GameScreen.windowSize);
         g.setColor(Color.BLACK);
         g.setFont(font);
@@ -82,6 +90,7 @@ public class BarrageScreen extends JPanel {
             g.fillPolygon(xPoints2, yPoints2, 10);
         }
 
-
+        g.setColor(Color.ORANGE);
+        g.fillRect(0, 0, (int)(GameScreen.windowRatio*GameLoop.bullets.bossHP), 5);
     }
 }

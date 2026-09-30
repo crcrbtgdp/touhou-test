@@ -10,7 +10,7 @@ public class InputManager {
 
     public static PlayerKeyListener keys;
     private static HashMap<Integer, Boolean> pressingKeys2;
-    static EnumMap<UsedKey, Boolean> pressingKeys;
+    public static EnumMap<UsedKey, Boolean> pressingKeys;
 
     static {
         keys = new PlayerKeyListener();

@@ -3,13 +3,21 @@ package io.github.crcrbtgdp.touhoutest;
 import io.github.crcrbtgdp.touhoutest.barrage.BarrageManager;
 import io.github.crcrbtgdp.touhoutest.barrage.BossMoving;
 import io.github.crcrbtgdp.touhoutest.loop.CoordinateConcatenation;
+import io.github.crcrbtgdp.touhoutest.playerbullets.BulletsMoving;
 import io.github.crcrbtgdp.touhoutest.playermovement.InputManager;
 import io.github.crcrbtgdp.touhoutest.playermovement.PlayerMoving;
+import io.github.crcrbtgdp.touhoutest.playermovement.UsedKey;
 import io.github.crcrbtgdp.touhoutest.screens.BarrageScreen;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameLoop implements ActionListener {
@@ -26,10 +34,16 @@ public class GameLoop implements ActionListener {
     double lastBossX = (double) GameScreen.windowSize /2;
     int lastBossFrame;
 
+    File pichuun;
+    AudioInputStream pichuunAudio;
+
     double[] lastPlayerCoordinate;
 
     public static int totalFrames = 0;
     public static ArrayList<BarrageManager> barrage = new ArrayList<>();
+
+    public static BulletsMoving bullets;
+    public static double[][] playerBullets;
 
     GameLoop(JFrame j, BarrageScreen sc) {
         window = j;
@@ -49,6 +63,18 @@ public class GameLoop implements ActionListener {
             window.setFocusable(true);
             window.requestFocusInWindow();
             window.addKeyListener(InputManager.keys);
+            try {
+                File file = new File(getClass().getResource("/owen.wav").toURI());
+                AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioIn);
+                clip.start();
+                //pichuun = new File(getClass().getResource("/pichuun.wav").toURI());
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            bullets = new BulletsMoving();
         }
 
         if (totalFrames%180 == 0) {
@@ -83,16 +109,30 @@ public class GameLoop implements ActionListener {
                 GameScreen.playerY = playerCoordinate[1];
             }
         }
+
+        if (InputManager.pressingKeys.get(UsedKey.VK_Z)) {
+            bullets.generate();
+        }
+        playerBullets = bullets.update();
+
         InputManager.update();
         lastPlayerCoordinate = playerCoordinate;
 
         if (pichu == -1) {
             for (int i = 0; i < GameScreen.coordinates[0].length; i++) {
-                boolean hit = HitDetection.judgement(playerCoordinate[0], playerCoordinate[1], GameScreen.coordinates[0][i], GameScreen.coordinates[1][i]);
+                boolean hit = HitDetection.judgement(playerCoordinate[0], playerCoordinate[1], GameScreen.coordinates[0][i], GameScreen.coordinates[1][i], 10);
                 if (!this.hit && hit) {
                     player--;
                     this.hit = true;
-                    pichu = totalFrames;
+                    try {
+                        pichuunAudio = AudioSystem.getAudioInputStream(getClass().getResource("/pichuun.wav"));
+                        pichu = totalFrames;
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(pichuunAudio);
+                        clip.start();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                     break;
                 }
                 if (i + 1 == GameScreen.coordinates[0].length) {
@@ -108,6 +148,9 @@ public class GameLoop implements ActionListener {
 
         if (totalFrames%60 == 0) {
             System.out.println(GameScreen.playerX);
+        }
+        if (bullets.bossHP <= 0) {
+            System.exit(0);
         }
         totalFrames++;
     }

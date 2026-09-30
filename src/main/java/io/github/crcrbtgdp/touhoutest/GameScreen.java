@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class GameScreen {
     public static double[][] coordinates;
-    float fps = 60;
+    public static float fps = 60;
 
     public static int windowSize = 720;
     public static double playerX = (double) windowSize /2;
@@ -25,6 +25,6 @@ public class GameScreen {
         BarrageScreen screen = new BarrageScreen();
 
         ActionListener game = new GameLoop(window, screen);
-        new Timer(17, game).start();
+        new Timer((int)(1000/fps), game).start();
     }
 }
