@@ -88,7 +88,9 @@ public class GameLoop implements ActionListener {
         if (totalFrames != 0 && totalFrames%((int)GameScreen.fps*3) >= GameScreen.fps) {
             if (totalFrames%((int)GameScreen.fps*3) == GameScreen.fps) {
                 lastBossX = BossMoving.getBossCoordinateX();
-                bossX = Math.random()*(double)GameScreen.windowSize;
+                while (Math.abs(lastBossX-bossX) < GameScreen.windowSize/5) {
+                    bossX = Math.random() * (double) GameScreen.windowSize;
+                }
                 lastBossFrame = totalFrames;
                 System.out.println(true);
             }
