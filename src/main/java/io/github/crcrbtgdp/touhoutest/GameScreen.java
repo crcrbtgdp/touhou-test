@@ -6,6 +6,7 @@ import io.github.crcrbtgdp.touhoutest.screens.BarrageScreen;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
 
 public class GameScreen {
     public static double[][] coordinates;
@@ -16,7 +17,7 @@ public class GameScreen {
     public static double playerY = (double) windowSize /2;
     public static final double windowRatio = (double) windowSize /1000;
 
-    void main() {
+    void main() throws MalformedURLException {
 
         PlayerMoving.windowRatio = windowRatio;
         InputManager.update();

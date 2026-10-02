@@ -18,12 +18,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 public class GameLoop implements ActionListener {
 
     JFrame window;
     BarrageScreen barrageScreen;
+
+    public static String jarFile;
+
+    static {
+        try {
+            jarFile = new File(GameScreen.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParentFile().getPath() + File.separator + "assets" + File.separator;
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     boolean hit;
     public static int pichu = -1;
@@ -45,6 +56,8 @@ public class GameLoop implements ActionListener {
     public static BulletsMoving bullets;
     public static double[][] playerBullets;
 
+    public static double[][] playerHomingBullets;
+
     GameLoop(JFrame j, BarrageScreen sc) {
         window = j;
         barrageScreen = sc;
@@ -64,15 +77,16 @@ public class GameLoop implements ActionListener {
             window.requestFocusInWindow();
             window.addKeyListener(InputManager.keys);
             try {
-                File file = new File(getClass().getResource("/bgm.wav").toURI());
+                File file = new File(jarFile + "bgm.wav");
                 AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
                 Clip clip = AudioSystem.getClip();
                 clip.open(audioIn);
                 clip.start();
-                //pichuun = new File(getClass().getResource("/pichuun.wav").toURI());
 
             } catch (Exception ex) {
-                ex.printStackTrace();
+                if (!ex.toString().contains("NullPointerException")) {
+                    ex.printStackTrace();
+                }
             }
             bullets = new BulletsMoving();
         }
@@ -127,13 +141,15 @@ public class GameLoop implements ActionListener {
                     player--;
                     this.hit = true;
                     try {
-                        pichuunAudio = AudioSystem.getAudioInputStream(getClass().getResource("/pichuun.wav"));
+                        pichuunAudio = AudioSystem.getAudioInputStream(new File(jarFile + "pichuun.wav"));
                         pichu = totalFrames;
                         Clip clip = AudioSystem.getClip();
                         clip.open(pichuunAudio);
                         clip.start();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        if (!ex.toString().contains("NullPointerException")) {
+                            ex.printStackTrace();
+                        }
                     }
                     break;
                 }

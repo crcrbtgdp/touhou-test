@@ -8,6 +8,8 @@ import io.github.crcrbtgdp.touhoutest.playerbullets.BulletsMoving;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 public class BarrageScreen extends JPanel {
@@ -15,19 +17,19 @@ public class BarrageScreen extends JPanel {
     ImageIcon fran;
     ImageIcon reimu;
     Font font;
-    URL[] imageUrl = {getClass().getResource("/fran.png"), getClass().getResource("/reimu.png")};
+    URL[] imageUrl = {new File(GameLoop.jarFile + "/fran.png").toURI().toURL(), new File(GameLoop.jarFile + "reimu.png").toURI().toURL()};
     ImageObserver imageObserver;
     double[] starX = {0, 0.58779, -0.58779, 0.95106, -0.95106};
     double[] starY = {1, -0.80902, -0.80902, 0.30902, 0.30902};
     int[] xPoints = new int[10];
     int[] yPoints = new int[10];
 
-    public BarrageScreen() {
+    public BarrageScreen() throws MalformedURLException {
         super();
         this.setFocusable(true);
         this.requestFocusInWindow();
         fran = new ImageIcon(imageUrl[0]);
-        reimu = new ImageIcon((imageUrl[1]));
+        reimu = new ImageIcon(imageUrl[1]);
         imageObserver = (img, infoflags, x, y, width, height) -> false;
         font = new Font("", Font.BOLD, GameScreen.windowSize/36);
 
@@ -95,6 +97,6 @@ public class BarrageScreen extends JPanel {
         }
 
         g.setColor(Color.ORANGE);
-        g.fillRect(0, 0, (int)(GameScreen.windowRatio*GameLoop.bullets.bossHP), 5);
+        g.fillRect(0, 0, (int)(GameScreen.windowRatio*GameLoop.bullets.bossHP/4), 5);
     }
 }

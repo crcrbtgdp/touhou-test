@@ -10,8 +10,8 @@ public class Parser {
 
     public Parser() {
         try {
-            barragesX = rf.read("testx");
-            barragesY = rf.read("testy");
+            barragesX = rf.read("testx.txt");
+            barragesY = rf.read("testy.txt");
             //System.out.println(barragesX);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -42,14 +42,11 @@ public class Parser {
                 index += 2;
                 String num2 = "";
 
-                num2 += i==0?barragesX.substring(index, index + 1):barragesY.substring(index, index + 1);
-                index++;
-                c = i==0?barragesX.charAt(index):barragesY.charAt(index);
-                while (index+1 < (i==0?barragesX.length():barragesY.length()) && (c >= '0' && c <= ':') || c == 't' || c == 'r' || c == '.') {
-                    num2 += i==0?barragesX.substring(index, index + 1):barragesY.substring(index, index + 1);
+                do {
+                    num2 += i == 0 ? barragesX.substring(index, index + 1) : barragesY.substring(index, index + 1);
                     index++;
-                    c = i==0?barragesX.charAt(index):barragesY.charAt(index);
-                }
+                    c = i == 0 ? barragesX.charAt(index) : barragesY.charAt(index);
+                } while (index + 1 < (i == 0 ? barragesX.length() : barragesY.length()) && ((c >= '0' && c <= ':') || c == 't' || c == 'r' || c == '.'));
                 if (index+1==(i==0?barragesX.length():barragesY.length())) {
                     num2 += i == 0 ? barragesX.substring(index, index + 1) : barragesY.substring(index, index + 1);
                 }
