@@ -42,11 +42,17 @@ public class Parser {
                 index += 2;
                 String num2 = "";
 
-                do {
-                    num2 += i == 0 ? barragesX.substring(index, index + 1) : barragesY.substring(index, index + 1);
+                String barrage = i == 0 ? barragesX : barragesY;
+
+                while (index < barrage.length()) {
+                    c = barrage.charAt(index);
+                    if (!((c >= '0' && c <= ':') || c == 't' || c == 'r' || c == '.')) {
+                        break;
+                    }
+                    num2 += c;
                     index++;
-                    c = i == 0 ? barragesX.charAt(index) : barragesY.charAt(index);
-                } while (index + 1 < (i == 0 ? barragesX.length() : barragesY.length()) && ((c >= '0' && c <= ':') || c == 't' || c == 'r' || c == '.'));
+                }
+
                 if (index+1==(i==0?barragesX.length():barragesY.length())) {
                     num2 += i == 0 ? barragesX.substring(index, index + 1) : barragesY.substring(index, index + 1);
                 }
