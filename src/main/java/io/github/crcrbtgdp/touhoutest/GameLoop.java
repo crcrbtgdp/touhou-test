@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import static io.github.crcrbtgdp.touhoutest.GameScreen.fps;
+
 public class GameLoop implements ActionListener {
 
     JFrame window;
@@ -91,16 +93,16 @@ public class GameLoop implements ActionListener {
             bullets = new BulletsMoving();
         }
 
-        if (totalFrames%((int)GameScreen.fps) == 0) {
-            barrage.add(new BarrageManager((double)totalFrames/GameScreen.fps));
+        if (totalFrames%((int) fps) == 0) {
+            barrage.add(new BarrageManager((double)totalFrames/ fps));
             barrage.getLast().generate();
-            if (totalFrames >= GameScreen.fps*24) {
+            if (totalFrames >= fps*24) {
                 barrage.removeFirst();
             }
         }
 
-        if (totalFrames != 0 && totalFrames%((int)GameScreen.fps*3) >= GameScreen.fps) {
-            if (totalFrames%((int)GameScreen.fps*3) == GameScreen.fps) {
+        if (totalFrames != 0 && totalFrames%((int) fps*3) >= fps) {
+            if (totalFrames%((int) fps*3) == fps) {
                 lastBossX = BossMoving.getBossCoordinateX();
                 while (Math.abs(lastBossX-bossX) < GameScreen.windowSize/5) {
                     bossX = Math.random() * (double) GameScreen.windowSize;
@@ -126,7 +128,7 @@ public class GameLoop implements ActionListener {
             }
         }
 
-        if (InputManager.pressingKeys.get(UsedKey.VK_Z)) {
+        if (InputManager.pressingKeys.get(UsedKey.VK_Z) && totalFrames % (int)(fps/30) == 0) {
             bullets.generate();
         }
         playerBullets = bullets.update();
@@ -164,7 +166,7 @@ public class GameLoop implements ActionListener {
 
         barrageScreen.repaint();
 
-        if (totalFrames%(int)GameScreen.fps == 0) {
+        if (totalFrames%(int) fps == 0) {
             System.out.println(GameScreen.playerX);
         }
         if (bullets.bossHP <= 0) {

@@ -16,7 +16,7 @@ public class GameScreen {
     public static double playerX = (double) windowSize /2;
     public static double playerY = (double) windowSize /2;
     public static final double windowRatio = (double) windowSize /1000;
-
+    public static double playerPower = 4d;
     void main() throws MalformedURLException {
 
         PlayerMoving.windowRatio = windowRatio;
