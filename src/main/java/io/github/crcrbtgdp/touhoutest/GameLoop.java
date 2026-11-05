@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -41,7 +42,8 @@ public class GameLoop implements ActionListener {
     boolean hit;
     public static int pichu = -1;
 
-    public static int player = 3;
+    public static final int playerMax = 3;
+    public static int player = playerMax;
 
     double bossX = (double) GameScreen.windowSize /2;
     double lastBossX = (double) GameScreen.windowSize /2;
@@ -64,6 +66,8 @@ public class GameLoop implements ActionListener {
         window = j;
         barrageScreen = sc;
     }
+
+    int bossMoveTime;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -91,18 +95,21 @@ public class GameLoop implements ActionListener {
                 }
             }
             bullets = new BulletsMoving();
+            try {
+                bossMoveTime = Integer.parseInt(new FileReader(new File(GameLoop.jarFile + "bossmove.txt")).readAllAsString());
+            } catch (IOException ex) {ex.printStackTrace();}
         }
 
         if (totalFrames%((int) fps) == 0) {
             barrage.add(new BarrageManager((double)totalFrames/ fps));
             barrage.getLast().generate();
-            if (totalFrames >= fps*24) {
+            if (totalFrames >= fps*8) {
                 barrage.removeFirst();
             }
         }
 
-        if (totalFrames != 0 && totalFrames%((int) fps*3) >= fps) {
-            if (totalFrames%((int) fps*3) == fps) {
+        if (bossMoveTime != 0 && (totalFrames != 0 && totalFrames%((int) fps*bossMoveTime) >= fps)) {
+            if (totalFrames%((int) fps*bossMoveTime) == fps) {
                 lastBossX = BossMoving.getBossCoordinateX();
                 while (Math.abs(lastBossX-bossX) < GameScreen.windowSize/5) {
                     bossX = Math.random() * (double) GameScreen.windowSize;

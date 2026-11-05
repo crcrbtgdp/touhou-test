@@ -10,9 +10,9 @@ public class BarrageMoving {
 
     double[] firstBossCoordinate;
 
-    BarrageMoving(BossMoving bm, Parser parser, int theta) {
+    BarrageMoving(BossMoving bm, Parser parser, double theta) {
         this.parser = parser;
-        this.theta = Math.PI/5*theta;
+        this.theta = theta;
         firstBossCoordinate = new double[]{BossMoving.getBossCoordinateX(), BossMoving.getBossCoordinateY()};
     }
 

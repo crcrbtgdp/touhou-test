@@ -84,7 +84,7 @@ public class BarrageScreen extends JPanel {
         int[] xPoints2 = new int[10];
         int[] yPoints2 = new int[10];
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < GameLoop.playerMax; i++) {
             for (int j = 0; j < 10; j++) {
                 xPoints2[j] = xPoints[j] + (int) (GameScreen.windowSize * 1.14 + ((double) (i * GameScreen.windowSize) /36));
                 yPoints2[j] = yPoints[j] + (int) (GameScreen.windowSize*0.19);

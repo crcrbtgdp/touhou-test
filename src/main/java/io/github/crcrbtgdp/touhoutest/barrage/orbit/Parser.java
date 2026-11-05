@@ -10,8 +10,8 @@ public class Parser {
 
     public Parser() {
         try {
-            barragesX = rf.read("testx.txt");
-            barragesY = rf.read("testy.txt");
+            barragesX = rf.read("x.txt");
+            barragesY = rf.read("y.txt");
             //System.out.println(barragesX);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -46,7 +46,7 @@ public class Parser {
 
                 while (index < barrage.length()) {
                     c = barrage.charAt(index);
-                    if (!((c >= '0' && c <= ':') || c == 't' || c == 'r' || c == '.')) {
+                    if (!((c >= '0' && c <= ':') || c == '-' || c == 't' || c == 'r' || c == '.')) {
                         break;
                     }
                     num2 += c;
