@@ -1,8 +1,7 @@
 package io.github.crcrbtgdp.touhoutest.playerbullets;
 
-import io.github.crcrbtgdp.touhoutest.GameLoop;
-import io.github.crcrbtgdp.touhoutest.GameScreen;
 import io.github.crcrbtgdp.touhoutest.HitDetection;
+import io.github.crcrbtgdp.touhoutest.PlayerData;
 import io.github.crcrbtgdp.touhoutest.barrage.BossMoving;
 
 import java.util.ArrayList;
@@ -19,25 +18,25 @@ public class BulletsMoving {
 
     int vx = 1;
     ArrayList<Double> misalignment = new ArrayList<>();
-    //double vy = GameScreen.windowSize / GameScreen.fps;
+    //double vy = PlayerData.windowSize / PlayerData.fps;
     ArrayList<Double> w = new ArrayList<>();
     ArrayList<Double> firstPlayerX = new ArrayList<>();
 
     public void generate() {
-        bulletsX.add(0d/*GameScreen.playerX*/);
+        bulletsX.add(0d/*PlayerData.playerX*/);
         bulletsY.add(0d);
-        for (int i = 0; i < Math.floor(GameScreen.playerPower); i++) {
-            double j = switch ((int) Math.floor(GameScreen.playerPower)) {
+        for (int i = 0; i < Math.floor(PlayerData.playerPower); i++) {
+            double j = switch ((int) Math.floor(PlayerData.playerPower)) {
                 case 1 -> 0;
-                case 2 -> i==2?GameScreen.windowRatio*10:GameScreen.windowRatio*-10;
-                default -> i<=2?(i==2?GameScreen.windowRatio*10:GameScreen.windowRatio*-10):(i==3?GameScreen.windowRatio*5:GameScreen.windowRatio*-5);
+                case 2 -> i==2?PlayerData.windowRatio*10:PlayerData.windowRatio*-10;
+                default -> i<=2?(i==2?PlayerData.windowRatio*10:PlayerData.windowRatio*-10):(i==3?PlayerData.windowRatio*5:PlayerData.windowRatio*-5);
             };
-            firstPlayerX.add(GameScreen.playerX + j);
-            homingBulletsX.add(GameScreen.playerX + j);
-            homingBulletsY.add(GameScreen.playerY + Math.abs(j)/2);
+            firstPlayerX.add(PlayerData.playerX + j);
+            homingBulletsX.add(PlayerData.playerX + j);
+            homingBulletsY.add(PlayerData.playerY + Math.abs(j)/2);
             misalignment.add(Math.abs(j)/2);
-            //vy.add(BossMoving.getBossCoordinateY() - GameScreen.playerY);
-            w.add(i<=2?0.001:GameScreen.windowRatio*30);
+            //vy.add(BossMoving.getBossCoordinateY() - PlayerData.playerY);
+            w.add(i<=2?0.001:PlayerData.windowRatio*30);
             time.add(0);
         }
     }
@@ -45,10 +44,10 @@ public class BulletsMoving {
     public double[][] update() {
         double[][] re = new double[2][];
         for (int j = 0; j < bulletsX.size(); j++) {
-            if (bulletsX.get(j) < 0 || bulletsX.get(j) >= GameScreen.windowSize || bulletsY.get(j) < 0 && bulletsY.get(j) >= GameScreen.windowSize) {
+            if (bulletsX.get(j) < 0 || bulletsX.get(j) >= PlayerData.windowSize || bulletsY.get(j) < 0 && bulletsY.get(j) >= PlayerData.windowSize) {
                 bulletsX.remove(j);
                 bulletsY.remove(j);
-            } else if (HitDetection.judgement(BossMoving.getBossCoordinateX(), BossMoving.getBossCoordinateY(), bulletsX.get(j)+GameScreen.playerX, bulletsY.get(j)+GameScreen.playerY, 40)) {
+            } else if (HitDetection.judgement(BossMoving.getBossCoordinateX(), BossMoving.getBossCoordinateY(), bulletsX.get(j)+PlayerData.playerX, bulletsY.get(j)+PlayerData.playerY, 40)) {
                 bulletsX.remove(j);
                 bulletsY.remove(j);
                 bossHP -= 4;
@@ -58,9 +57,9 @@ public class BulletsMoving {
             re[i] = new double[bulletsX.size()];
             for (int j = 0; j < bulletsX.size(); j++) {
                 if (i==1) {
-                    bulletsY.set(j, bulletsY.get(j) - GameScreen.windowSize / GameScreen.fps);
+                    bulletsY.set(j, bulletsY.get(j) - PlayerData.windowSize / PlayerData.fps);
                 }
-                re[i][j] = (i==0?bulletsX.get(j)+GameScreen.playerX:bulletsY.get(j)+GameScreen.playerY);
+                re[i][j] = (i==0?bulletsX.get(j)+PlayerData.playerX:bulletsY.get(j)+PlayerData.playerY);
 
             }
         }
@@ -77,16 +76,16 @@ public class BulletsMoving {
 
     private double[][] homingUpdate() {
         double[][] re = new double[2][];
-        for (int i = 0; i < Math.floor(GameScreen.playerPower); i++) {
+        for (int i = 0; i < Math.floor(PlayerData.playerPower); i++) {
             for (int j = homingBulletsX.size()-1; j >= 0 ; j--) {
-                if (homingBulletsX.get(j) < 0 || homingBulletsX.get(j) >= GameScreen.windowSize || homingBulletsY.get(j) + GameScreen.playerY < 0 && homingBulletsY.get(j) + GameScreen.playerY >= GameScreen.windowSize) {
+                if (homingBulletsX.get(j) < 0 || homingBulletsX.get(j) >= PlayerData.windowSize || homingBulletsY.get(j) + PlayerData.playerY < 0 && homingBulletsY.get(j) + PlayerData.playerY >= PlayerData.windowSize) {
                     homingBulletsX.remove(j);
                     homingBulletsY.remove(j);
                     time.remove(j);
                     w.remove(j);
                     misalignment.remove(j);
                     firstPlayerX.remove(j);
-                } else if (HitDetection.judgement(BossMoving.getBossCoordinateX(), BossMoving.getBossCoordinateY(), homingBulletsX.get(j)/* + GameScreen.playerX*/, homingBulletsY.get(j) + misalignment.get(j) + GameScreen.playerY, 40)) {
+                } else if (HitDetection.judgement(BossMoving.getBossCoordinateX(), BossMoving.getBossCoordinateY(), homingBulletsX.get(j)/* + PlayerData.playerX*/, homingBulletsY.get(j) + misalignment.get(j) + PlayerData.playerY, 40)) {
                     homingBulletsX.remove(j);
                     homingBulletsY.remove(j);
                     time.remove(j);
@@ -103,9 +102,9 @@ public class BulletsMoving {
 
                     //if (j == 1) {
                         homingBulletsX.set(k, (0.5 * time2 * vx - w.get(k)) * time2 + BossMoving.getBossCoordinateX() + ((firstPlayerX.get(k) - BossMoving.getBossCoordinateX()) * (time2 / (-2 * w.get(k)) +1)));
-                        homingBulletsY.set(k, (BossMoving.getBossCoordinateY() - GameScreen.playerY) * time2 / (2 * w.get(k)));
+                        homingBulletsY.set(k, (BossMoving.getBossCoordinateY() - PlayerData.playerY) * time2 / (2 * w.get(k)));
                     //}
-                    re[j][k] = (j == 0 ? homingBulletsX.get(k) : homingBulletsY.get(k) + GameScreen.playerY + misalignment.get(k));
+                    re[j][k] = (j == 0 ? homingBulletsX.get(k) : homingBulletsY.get(k) + PlayerData.playerY + misalignment.get(k));
                     time.set(k, time.get(k) + 2);
                 }
             }

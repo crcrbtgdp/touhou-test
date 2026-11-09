@@ -6,7 +6,6 @@ import io.github.crcrbtgdp.touhoutest.barrage.orbit.Parser;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class BarrageManager {
@@ -45,7 +44,6 @@ public class BarrageManager {
         double[][] coordinates = new double[2][r[0]];
         for (int i = 0; i < r[0]; i++) {
             double[] a = barrages[i].update(t-frames);
-            //System.out.println(Double.toString(a[0]) + Double.toString(a[1]));
             coordinates[0][i] = a[0];
             coordinates[1][i] = a[1];
         }

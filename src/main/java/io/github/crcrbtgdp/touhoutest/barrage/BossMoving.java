@@ -1,10 +1,11 @@
 package io.github.crcrbtgdp.touhoutest.barrage;
 
 import io.github.crcrbtgdp.touhoutest.GameScreen;
+import io.github.crcrbtgdp.touhoutest.PlayerData;
 
 public class BossMoving {
-    private static double bossCoordinateX = (double) GameScreen.windowSize /2;
-    private static double bossCoordinateY = (double) GameScreen.windowSize /10;
+    private static double bossCoordinateX = (double) PlayerData.windowSize /2;
+    private static double bossCoordinateY = (double) PlayerData.windowSize /10;
 
     public static double getBossCoordinateY() {
         return bossCoordinateY;

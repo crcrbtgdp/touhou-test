@@ -1,10 +1,10 @@
 package io.github.crcrbtgdp.touhoutest.playermovement;
 
-import io.github.crcrbtgdp.touhoutest.GameScreen;
+import io.github.crcrbtgdp.touhoutest.PlayerData;
 
 public class PlayerMoving {
 
-    static float fps = GameScreen.fps;//後で消さない
+    static float fps = PlayerData.fps;
 
     public static double windowRatio;
 
