@@ -16,7 +16,7 @@ public class BulletsMoving {
     ArrayList<Double> homingBulletsX = new ArrayList<>();
     ArrayList<Double> homingBulletsY = new ArrayList<>();
 
-    int vx = 1;
+    private static final int HOMING_VELOCITY_X = 1;
     ArrayList<Double> misalignment = new ArrayList<>();
     //double vy = PlayerData.windowSize / PlayerData.fps;
     ArrayList<Double> w = new ArrayList<>();
@@ -56,7 +56,7 @@ public class BulletsMoving {
         for (int i = 0; i < 2; i++) {
             re[i] = new double[bulletsX.size()];
             for (int j = 0; j < bulletsX.size(); j++) {
-                if (i==1) {
+                if (i == 1) {
                     bulletsY.set(j, bulletsY.get(j) - PlayerData.windowSize / PlayerData.fps);
                 }
                 re[i][j] = (i==0?bulletsX.get(j)+PlayerData.playerX:bulletsY.get(j)+PlayerData.playerY);
@@ -101,7 +101,7 @@ public class BulletsMoving {
                     double time2 = time.get(k) * w.get(k) / 500d;
 
                     //if (j == 1) {
-                        homingBulletsX.set(k, (0.5 * time2 * vx - w.get(k)) * time2 + BossMoving.getBossCoordinateX() + ((firstPlayerX.get(k) - BossMoving.getBossCoordinateX()) * (time2 / (-2 * w.get(k)) +1)));
+                        homingBulletsX.set(k, (0.5 * time2 * HOMING_VELOCITY_X - w.get(k)) * time2 + BossMoving.getBossCoordinateX() + ((firstPlayerX.get(k) - BossMoving.getBossCoordinateX()) * (time2 / (-2 * w.get(k)) +1)));
                         homingBulletsY.set(k, (BossMoving.getBossCoordinateY() - PlayerData.playerY) * time2 / (2 * w.get(k)));
                     //}
                     re[j][k] = (j == 0 ? homingBulletsX.get(k) : homingBulletsY.get(k) + PlayerData.playerY + misalignment.get(k));

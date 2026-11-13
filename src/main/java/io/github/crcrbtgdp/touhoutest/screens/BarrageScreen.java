@@ -13,15 +13,14 @@ import java.net.URL;
 
 public class BarrageScreen extends JPanel {
 
+    private static final int STAR_POINT_COUNT = 10;
     ImageIcon fran;
     ImageIcon reimu;
     Font font;
     URL[] imageUrl = {new File(GameLoop.jarFile + "/fran.png").toURI().toURL(), new File(GameLoop.jarFile + "reimu.png").toURI().toURL()};
     ImageObserver imageObserver;
-    double[] starX = {0, 0.58779, -0.58779, 0.95106, -0.95106};
-    double[] starY = {1, -0.80902, -0.80902, 0.30902, 0.30902};
-    int[] xPoints = new int[10];
-    int[] yPoints = new int[10];
+    int[] xPoints = new int[STAR_POINT_COUNT];
+    int[] yPoints = new int[STAR_POINT_COUNT];
 
     public BarrageScreen() throws MalformedURLException {
         super();
@@ -32,7 +31,7 @@ public class BarrageScreen extends JPanel {
         imageObserver = (img, infoflags, x, y, width, height) -> false;
         font = new Font("", Font.BOLD, PlayerData.windowSize/36);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < STAR_POINT_COUNT; i++) {
             xPoints[i] = (int)(Math.sin(i*Math.PI/5)*PlayerData.windowRatio*15*(i%2==0?(3-Math.sqrt(5))/2:1));
             yPoints[i] = (int)(Math.cos(i*Math.PI/5)*PlayerData.windowRatio*15*(i%2==0?(3-Math.sqrt(5))/2:1));
         }
@@ -80,18 +79,18 @@ public class BarrageScreen extends JPanel {
         g.drawString("Player", (int)(PlayerData.windowSize*1.02), PlayerData.windowSize/5);
         g.setColor(Color.RED);
 
-        int[] xPoints2 = new int[10];
-        int[] yPoints2 = new int[10];
+        int[] xPoints2 = new int[STAR_POINT_COUNT];
+        int[] yPoints2 = new int[STAR_POINT_COUNT];
 
         for (int i = 0; i < GameLoop.playerMax; i++) {
-            for (int j = 0; j < 10; j++) {
+            for (int j = 0; j < STAR_POINT_COUNT; j++) {
                 xPoints2[j] = xPoints[j] + (int) (PlayerData.windowSize * 1.14 + ((double) (i * PlayerData.windowSize) /36));
                 yPoints2[j] = yPoints[j] + (int) (PlayerData.windowSize*0.19);
             }
             if (i < GameLoop.player) {
-                g.fillPolygon(xPoints2, yPoints2, 10);
+                g.fillPolygon(xPoints2, yPoints2, STAR_POINT_COUNT);
             } else {
-                g.drawPolygon(xPoints2, yPoints2, 10);
+                g.drawPolygon(xPoints2, yPoints2, STAR_POINT_COUNT);
             }
         }
 

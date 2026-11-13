@@ -4,15 +4,13 @@ import java.io.IOException;
 
 public class Parser {
 
-    ReadFile rf = new ReadFile();
-    String barragesX;
-    String barragesY;
+    private final String[] barrages = new String[2];
 
     public Parser() {
         try {
-            barragesX = rf.read("x.txt");
-            barragesY = rf.read("y.txt");
-            //System.out.println(barragesX);
+            ReadFile readFile = new ReadFile();
+            barrages[0] = readFile.read("x.txt");
+            barrages[1] = readFile.read("y.txt");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -20,45 +18,35 @@ public class Parser {
 
     public double[] calculate(double t, double r) {
 
-        char c;
-        int index;
-        double num;
         double[] nums = new double[2];
 
         for (int i = 0; i < 2; i++) {
-            c = 0;
-            index = 0;
-            while (c != '>') {//(i==0?
-                index++;
-                c = i==0?barragesX.charAt(index):barragesY.charAt(index);
-            }
-            index++;
-            num = 0;
-            String instruction;
+            String barrage = barrages[i];
+            int index = barrage.indexOf('>') + 1;
+            double num = 0;
             Calculate calculate = new Calculate();
 
             do {
-                instruction = i==0?barragesX.substring(index, index + 2):barragesY.substring(index, index + 2);
+                String instruction = barrage.substring(index, index + 2);
                 index += 2;
-                String num2 = "";
-
-                String barrage = i == 0 ? barragesX : barragesY;
+                StringBuilder operand = new StringBuilder();
 
                 while (index < barrage.length()) {
-                    c = barrage.charAt(index);
+                    char c = barrage.charAt(index);
                     if (!((c >= '0' && c <= ':') || c == '-' || c == 't' || c == 'r' || c == '.')) {
                         break;
                     }
-                    num2 += c;
+                    operand.append(c);
                     index++;
                 }
 
-                if (index+1==(i==0?barragesX.length():barragesY.length())) {
-                    num2 += i == 0 ? barragesX.substring(index, index + 1) : barragesY.substring(index, index + 1);
+                if (index + 1 == barrage.length()) {
+                    operand.append(barrage.charAt(index));
                 }
-                num = calculate.calculate(instruction, num, num2.equals("t") ? Double.toString(t) : (num2.equals("r") ? Double.toString(r) : num2));
-                //System.out.println(num);
-            } while (index+1 < (i==0?barragesX.length():barragesY.length()));
+                String value = operand.toString();
+                num = calculate.calculate(instruction, num,
+                        value.equals("t") ? Double.toString(t) : value.equals("r") ? Double.toString(r) : value);
+            } while (index + 1 < barrage.length());
             nums[i] = num;
         }
         return nums;

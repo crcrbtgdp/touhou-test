@@ -1,15 +1,16 @@
 package io.github.crcrbtgdp.touhoutest.barrage.orbit;
 
 import java.util.HashMap;
+import java.util.Map;
 
 class Calculate {
 
-    HashMap<Integer, Double> memory = new HashMap<>();
+    private final Map<Integer, Double> memory = new HashMap<>();
 
     double calculate(String instruction, double num1, String str) {
         double num2;
         if (str.charAt(0) == ':') {
-            num2 = memory.get(Integer.valueOf(str.substring(1)));
+            num2 = memory.get(Integer.parseInt(str.substring(1)));
         } else {
             num2 = Double.parseDouble(str);
         }

@@ -17,7 +17,7 @@ public class GameScreen {
         JFrame window = new JFrame("東方");
         BarrageScreen screen = new BarrageScreen();
 
-        ActionListener game = new GameLoop(window, screen);
-        new Timer((int)(1000/PlayerData.fps), game).start();
+        ActionListener gameLoop = new GameLoop(window, screen);
+        new Timer((int) (1000 / PlayerData.fps), gameLoop).start();
     }
 }

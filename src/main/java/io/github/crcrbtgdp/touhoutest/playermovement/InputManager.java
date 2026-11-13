@@ -9,29 +9,34 @@ import java.awt.event.KeyEvent;
 public class InputManager {
 
     public static PlayerKeyListener keys;
-    private static HashMap<Integer, Boolean> pressingKeys2;
-    public static EnumMap<UsedKey, Boolean> pressingKeys;
+    public static final EnumMap<UsedKey, Boolean> pressingKeys = new EnumMap<>(UsedKey.class);
 
     static {
         keys = new PlayerKeyListener();
-        pressingKeys = new EnumMap<>(UsedKey.class);
+        for (UsedKey key : UsedKey.values()) {
+            pressingKeys.put(key, false);
+        }
     }
 
     public static void update() {
-        pressingKeys2 = new HashMap<>(keys.pressingKey);
+        var rawKeys = new HashMap<>(keys.pressingKey);
         keys.reset();
-        for (int a : pressingKeys2.keySet()) {
-            switch (a) {
-                case KeyEvent.VK_Z -> pressingKeys.put(UsedKey.VK_Z, pressingKeys2.get(a));
-                case KeyEvent.VK_X -> pressingKeys.put(UsedKey.VK_X, pressingKeys2.get(a));
-                case KeyEvent.VK_SHIFT -> pressingKeys.put(UsedKey.VK_SHIFT, pressingKeys2.get(a));
-                case KeyEvent.VK_ENTER -> pressingKeys.put(UsedKey.VK_ENTER, pressingKeys2.get(a));
-                case KeyEvent.VK_ESCAPE -> pressingKeys.put(UsedKey.VK_ESCAPE, pressingKeys2.get(a));
-                case KeyEvent.VK_UP -> pressingKeys.put(UsedKey.VK_UP, pressingKeys2.get(a));
-                case KeyEvent.VK_DOWN -> pressingKeys.put(UsedKey.VK_DOWN, pressingKeys2.get(a));
-                case KeyEvent.VK_LEFT -> pressingKeys.put(UsedKey.VK_LEFT, pressingKeys2.get(a));
-                case KeyEvent.VK_RIGHT -> pressingKeys.put(UsedKey.VK_RIGHT, pressingKeys2.get(a));
-            }
+        for (UsedKey key : UsedKey.values()) {
+            pressingKeys.put(key, rawKeys.get(keyCode(key)));
         }
+    }
+
+    private static int keyCode(UsedKey key) {
+        return switch (key) {
+            case VK_Z -> KeyEvent.VK_Z;
+            case VK_X -> KeyEvent.VK_X;
+            case VK_SHIFT -> KeyEvent.VK_SHIFT;
+            case VK_ENTER -> KeyEvent.VK_ENTER;
+            case VK_ESCAPE -> KeyEvent.VK_ESCAPE;
+            case VK_UP -> KeyEvent.VK_UP;
+            case VK_DOWN -> KeyEvent.VK_DOWN;
+            case VK_LEFT -> KeyEvent.VK_LEFT;
+            case VK_RIGHT -> KeyEvent.VK_RIGHT;
+        };
     }
 }

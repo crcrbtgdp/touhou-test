@@ -5,8 +5,7 @@ import io.github.crcrbtgdp.touhoutest.barrage.orbit.Parser;
 public class BarrageMoving {
 
     private final double theta;
-    private BossMoving bm;
-    private Parser parser;
+    private final Parser parser;
 
     double[] firstBossCoordinate;
 

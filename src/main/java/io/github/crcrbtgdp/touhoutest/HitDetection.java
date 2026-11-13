@@ -2,6 +2,9 @@ package io.github.crcrbtgdp.touhoutest;
 
 public class HitDetection {
     public static boolean judgement(double x1, double y1, double x2, double y2, double r) {
-        return Math.sqrt((x1-x2)*(x1-x2) + ((y1-y2)*(y1-y2))) <= r*PlayerData.windowRatio;
+        double deltaX = x1 - x2;
+        double deltaY = y1 - y2;
+        double scaledRadius = r * PlayerData.windowRatio;
+        return deltaX * deltaX + deltaY * deltaY <= scaledRadius * scaledRadius;
     }
 }

@@ -16,7 +16,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileReader;
+import java.nio.file.Files;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -25,12 +25,15 @@ import static io.github.crcrbtgdp.touhoutest.PlayerData.fps;
 
 public class GameLoop implements ActionListener {
 
-    JFrame window;
-    BarrageScreen barrageScreen;
+    private static final int PLAYER_SIZE = 25;
+    private static final int BOSS_MOVE_MIN_DISTANCE = PlayerData.windowSize / 5;
+
+    private final JFrame window;
+    private final BarrageScreen barrageScreen;
 
     public static String jarFile;
 
-    SpellCard spell;
+    private SpellCard spell;
 
     static {
         try {
@@ -40,20 +43,15 @@ public class GameLoop implements ActionListener {
         }
     }
 
-    boolean hit;
+    private boolean hit;
     public static int pichu = -1;
 
     public static final int playerMax = 3;
     public static int player = playerMax;
 
-    double bossX = (double) PlayerData.windowSize /2;
-    double lastBossX = (double) PlayerData.windowSize /2;
-    int lastBossFrame;
-
-    File pichuun;
-    AudioInputStream pichuunAudio;
-
-    double[] lastPlayerCoordinate;
+    private double bossX = (double) PlayerData.windowSize / 2;
+    private double lastBossX = (double) PlayerData.windowSize / 2;
+    private int lastBossFrame;
 
     public static int totalFrames = 0;
     public static ArrayList<BarrageManager> barrage = new ArrayList<>();
@@ -68,57 +66,21 @@ public class GameLoop implements ActionListener {
         barrageScreen = sc;
     }
 
-    int bossMoveTime;
+    private int bossMoveTime;
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
 
         if (totalFrames == 0) {
-            spell = new SpellCard();
-            //window.setLayout(new GridBagLayout());
-            //GridBagConstraints gbc = new GridBagConstraints();
-            window.setSize((int)(PlayerData.windowSize*1.33), PlayerData.windowSize);
-            window.add(barrageScreen);
-            window.setVisible(true);
-            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            window.setFocusable(true);
-            window.requestFocusInWindow();
-            window.addKeyListener(InputManager.keys);
-            try {
-                File file = new File(jarFile + "bgm.wav");
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
-                clip.start();
-
-            } catch (Exception ex) {
-                if (!ex.toString().contains("NullPointerException")) {
-                    ex.printStackTrace();
-                }
-            }
-            bullets = new BulletsMoving();
-            try {
-                bossMoveTime = Integer.parseInt(new FileReader(new File(GameLoop.jarFile + "bossmove.txt")).readAllAsString());
-            } catch (IOException ex) {ex.printStackTrace();}
+            initializeGame();
         }
 
         if (totalFrames%((int) fps) == 0) {
             spell.generate(barrage);
         }
 
-        if (bossMoveTime != 0 && (totalFrames != 0 && totalFrames%((int) fps*bossMoveTime) >= fps)) {
-            if (totalFrames%((int) fps*bossMoveTime) == fps) {
-                lastBossX = BossMoving.getBossCoordinateX();
-                while (Math.abs(lastBossX-bossX) < PlayerData.windowSize/5) {
-                    bossX = Math.random() * (double) PlayerData.windowSize;
-                }
-                lastBossFrame = totalFrames;
-                System.out.println(true);
-            }
-//            BossMoving.setBossCoordinateX((bossX-lastBossX)*(totalFrames-lastBossFrame)/120+lastBossX);
-            BossMoving.setBossCoordinateX((bossX-lastBossX)*(Math.atan((totalFrames-lastBossFrame)/24d-2.5)/2d/Math.atan(2.5)+0.5)+lastBossX);
-        }
+        updateBossPosition();
 
         PlayerData.coordinates = CoordinateConcatenation.concatenation(barrage, totalFrames);
 
@@ -126,10 +88,10 @@ public class GameLoop implements ActionListener {
 
         double[] playerCoordinate = PlayerMoving.move(PlayerData.playerX, PlayerData.playerY);
         if (totalFrames != 0) {
-            if (playerCoordinate[0] < PlayerData.windowSize-(25*PlayerData.windowRatio) && playerCoordinate[0] >= -25*PlayerData.windowRatio) {
+            if (isInsidePlayArea(playerCoordinate[0])) {
                 PlayerData.playerX = playerCoordinate[0];
             }
-            if (playerCoordinate[1] < PlayerData.windowSize-(25*PlayerData.windowRatio) && playerCoordinate[1] >= -25*PlayerData.windowRatio) {
+            if (isInsidePlayArea(playerCoordinate[1])) {
                 PlayerData.playerY = playerCoordinate[1];
             }
         }
@@ -140,31 +102,8 @@ public class GameLoop implements ActionListener {
         playerBullets = bullets.update();
 
         InputManager.update();
-        lastPlayerCoordinate = playerCoordinate;
-
         if (pichu == -1) {
-            for (int i = 0; i < PlayerData.coordinates[0].length; i++) {
-                boolean hit = HitDetection.judgement(playerCoordinate[0], playerCoordinate[1], PlayerData.coordinates[0][i], PlayerData.coordinates[1][i], 10);
-                if (!this.hit && hit) {
-                    player--;
-                    this.hit = true;
-                    try {
-                        pichuunAudio = AudioSystem.getAudioInputStream(new File(jarFile + "pichuun.wav"));
-                        pichu = totalFrames;
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(pichuunAudio);
-                        clip.start();
-                    } catch (Exception ex) {
-                        if (!ex.toString().contains("NullPointerException")) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    break;
-                }
-                if (i + 1 == PlayerData.coordinates[0].length) {
-                    this.hit = hit;
-                }
-            }
+            checkPlayerHit(playerCoordinate);
         }
         if (player < 0) {
             System.exit(0);
@@ -180,5 +119,74 @@ public class GameLoop implements ActionListener {
         }
         totalFrames++;
         spell.update(totalFrames);
+    }
+
+    private void initializeGame() {
+        spell = new SpellCard();
+        window.setSize((int) (PlayerData.windowSize * 1.33), PlayerData.windowSize);
+        window.add(barrageScreen);
+        window.setVisible(true);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setFocusable(true);
+        window.requestFocusInWindow();
+        window.addKeyListener(InputManager.keys);
+        playAudio("bgm.wav");
+        bullets = new BulletsMoving();
+
+        try {
+            bossMoveTime = Integer.parseInt(Files.readString(new File(jarFile, "bossmove.txt").toPath()));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void updateBossPosition() {
+        int moveDurationFrames = (int) fps * bossMoveTime;
+        if (bossMoveTime == 0 || totalFrames == 0 || totalFrames % moveDurationFrames < fps) {
+            return;
+        }
+        if (totalFrames % moveDurationFrames == fps) {
+            lastBossX = BossMoving.getBossCoordinateX();
+            do {
+                bossX = Math.random() * PlayerData.windowSize;
+            } while (Math.abs(lastBossX - bossX) < BOSS_MOVE_MIN_DISTANCE);
+            lastBossFrame = totalFrames;
+        }
+        double progress = Math.atan((totalFrames - lastBossFrame) / 24d - 2.5) / (2d * Math.atan(2.5)) + 0.5;
+        BossMoving.setBossCoordinateX((bossX - lastBossX) * progress + lastBossX);
+    }
+
+    private boolean isInsidePlayArea(double coordinate) {
+        double margin = PLAYER_SIZE * PlayerData.windowRatio;
+        return coordinate < PlayerData.windowSize - margin && coordinate >= -margin;
+    }
+
+    private void checkPlayerHit(double[] playerCoordinate) {
+        for (int i = 0; i < PlayerData.coordinates[0].length; i++) {
+            boolean collides = HitDetection.judgement(playerCoordinate[0], playerCoordinate[1],
+                    PlayerData.coordinates[0][i], PlayerData.coordinates[1][i], 10);
+            if (!hit && collides) {
+                player--;
+                hit = true;
+                pichu = totalFrames;
+                playAudio("pichuun.wav");
+                return;
+            }
+            if (i + 1 == PlayerData.coordinates[0].length) {
+                hit = collides;
+            }
+        }
+    }
+
+    private void playAudio(String filename) {
+        try (AudioInputStream audio = AudioSystem.getAudioInputStream(new File(jarFile, filename))) {
+            Clip clip = AudioSystem.getClip();
+            clip.open(audio);
+            clip.start();
+        } catch (Exception ex) {
+            if (!(ex instanceof NullPointerException)) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

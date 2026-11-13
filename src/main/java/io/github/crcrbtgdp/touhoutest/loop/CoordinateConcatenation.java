@@ -1,6 +1,5 @@
 package io.github.crcrbtgdp.touhoutest.loop;
 
-import io.github.crcrbtgdp.touhoutest.GameScreen;
 import io.github.crcrbtgdp.touhoutest.PlayerData;
 import io.github.crcrbtgdp.touhoutest.barrage.BarrageManager;
 
@@ -16,19 +15,18 @@ public class CoordinateConcatenation {
             barrages[n] = barrage2.update((double)totalFrames/ PlayerData.fps);
             n++;
         }
-        int len2 = 0;
-        int[] len3 = new int[len];
-        int[] len4 = new int[len];
+        int coordinateCount = 0;
         for (int i = 0; i < len; i++) {
-            len2 += barrages[i][0].length;
-            len3[i] = barrages[i][0].length;
-            len4[i] = len2;
+            coordinateCount += barrages[i][0].length;
         }
-        double[] coordinatesX = new double[len2];
-        double[] coordinatesY = new double[len2];
+        double[] coordinatesX = new double[coordinateCount];
+        double[] coordinatesY = new double[coordinateCount];
+        int offset = 0;
         for (int i = 0; i < len; i++) {
-            System.arraycopy(barrages[i][0], 0, coordinatesX, i==0?0:len4[i-1], len3[i]);
-            System.arraycopy(barrages[i][1], 0, coordinatesY, i==0?0:len4[i-1], len3[i]);
+            int barrageSize = barrages[i][0].length;
+            System.arraycopy(barrages[i][0], 0, coordinatesX, offset, barrageSize);
+            System.arraycopy(barrages[i][1], 0, coordinatesY, offset, barrageSize);
+            offset += barrageSize;
         }
         return new double[][]{coordinatesX, coordinatesY};
     }

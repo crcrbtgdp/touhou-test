@@ -4,27 +4,25 @@ import io.github.crcrbtgdp.touhoutest.GameLoop;
 import io.github.crcrbtgdp.touhoutest.barrage.orbit.Parser;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public class BarrageManager {
-    int[] r;
+    private final int[] r;
 
-    BarrageMoving[] barrages;
+    private final BarrageMoving[] barrages;
     public BossMoving bm;
     private double frames;
-    private Parser parser;
+    private final Parser parser;
 
     public BarrageManager(double frames) {
         try {
-            FileReader fr = new FileReader(new File(GameLoop.jarFile + "r.txt"));
-            List<String> str = fr.readAllLines();
+            List<String> str = Files.readAllLines(new File(GameLoop.jarFile, "r.txt").toPath());
             r = new int[str.size()];
             for (int i = 0; i < str.size(); i++) {
                 r[i] = Integer.parseInt(str.get(i));
             }
-            fr.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
